@@ -1,0 +1,2 @@
+prevhandler == <gamefinish.GameFinish instance at 0x00D34DC8>
+switchhandler == <function preGameStart at 0x00D09D30>
