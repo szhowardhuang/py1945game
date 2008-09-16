@@ -1,3 +1,10 @@
+"""
+Modulo levels.
+
+TODO:
+Refatorar as constantes e metodos de criacao dos waves
+para classes de inimigos.
+"""
 import game
 import pygame
 from wave_manager import Wave
@@ -303,16 +310,4 @@ def maxwavesperlevel():
     
 def maxlevels():
     return 2
-
-def numrocks(level):
-    if level >= maxlevels():
-        return 18
-    percent = float(level) / maxlevels()
-    return int(percent * 12)
-
-def maxsimwaves(level):
-    if 0 <= level <= 5: return randint(1, 2)
-    elif 6 < level <= 10: return randint(1, 3)
-    elif 11 < level <= 15: return randint(2, 3)
-    else: return 4
 

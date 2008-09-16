@@ -57,6 +57,8 @@ class GameInit:
     """
     def __init__(self, prevhandler):
         """
+        Parametros:
+        prevhandler - handler previamente ativo do jogo.
         """
         self.prevhandler = prevhandler
         font = txt.Font(None, 20)

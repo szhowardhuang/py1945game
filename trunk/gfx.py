@@ -1,11 +1,13 @@
-"""graphics class, helps everyone to draw"""
+"""graphics class, helps everyone to draw
+Copyright Peter Shinners from SolarWolf.
+"""
 
 import sys, pygame, pygame.image
 from pygame.locals import *
 
 import game, map
 
-#the accessable screen surface and size
+#the accessible screen surface and size
 surface = None
 rect = Rect(0, 0, 0, 0)
 

@@ -30,6 +30,9 @@ def load_prefs():
 
 
 def save_prefs():
+    """
+    Salva as preferencias do jogador.
+    """
     try:
         filename = game.make_dataname('prefs')
         f = open(filename, 'w')

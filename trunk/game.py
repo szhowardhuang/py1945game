@@ -9,7 +9,7 @@ from pygame.rect import Rect
 
 #Variaveis globais
 start_lives = 3         #Numero de vidas iniciais do jogador
-start_stamina = 100     #Stammina inicial ("vida" do jogador)
+start_stamina = 100     #Stamina inicial ("vida" do jogador)
 player_shotspeed = 10.5  #Velocidade de tiro do jogador        
 enemy_fire = 80         #Numero de ticks para o proximo tiro inimigo
 wavetime = 100          #VERIFICAR SE ESTA SENDO UTILIZADA.
@@ -21,9 +21,7 @@ powerupspeed = 1.5
 powerupwait = 26.0 #45.0
 asteroidspeed = 1.4
 
-timeleft = 0.0
-timetick = 0.0
-timefactor = 12.2    #how quickly time drops (bigger = slower)
+
 speedmult = 0
 musictime = 1000 * 120 #Tempo da musica (2 minutos)
 text_length = 80  #frames text is displayed in-game
@@ -75,4 +73,4 @@ def make_dataname(filename):
     return filename
 
 version = "0.0.1" #Versao atual do jogo
-DEBUG = 0  #REMOVER
+DEBUG = 0  #Modo de debug
