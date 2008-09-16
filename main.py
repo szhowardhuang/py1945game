@@ -3,7 +3,7 @@
 import pygame
 import game, gfx, snd, txt
 import allmodules
-import players, gamepref
+import gamepref
 import gameplay
 from pygame.locals import *
 
@@ -24,7 +24,6 @@ def gamemain(args):
     pygame.init()
     game.clock = pygame.time.Clock()
 
-    players.load_players()
     gamepref.load_prefs()
 
     full = 1
@@ -94,7 +93,6 @@ def gamemain(args):
 
     #game is finished at this point, do any
     #uninitialization needed
-    players.save_players()
     gamepref.save_prefs()
     pygame.quit()
 

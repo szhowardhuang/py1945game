@@ -13,7 +13,7 @@ import objshot
 import objpopshot, objtext
 import objpowerup
 import objairplane
-import levels, players
+import levels
 import hud
 import map
 import txt

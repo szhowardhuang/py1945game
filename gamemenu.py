@@ -5,7 +5,7 @@ Gerencia o menu principal do jogo.
 
 import pygame
 from pygame.locals import *
-import game, players, gameplay
+import game, gameplay
 import gfx, snd, txt
 import gamecreds, gamepref
 
@@ -41,7 +41,6 @@ def preGameStart(prevhandler):
     Funcao executa antes da inicializacao
     do jogo.
     """     
-    game.player = players.Player('')
     return gameplay.GamePlay(prevhandler)
 
 #Definicao do menu principal
