@@ -1,11 +1,13 @@
+"""
+Modulo objgun.
+
+Define as armas do jogador e dos inimigos.
+"""
 import objshot
 from functools import partial
 from copy import copy
 import snd
-
-#def load_game_resources():
-    #snd.preload('singleshot') #'twinshot', 'ballshot', 'spreadshot', 'defensiveshot')
-    
+  
 class Gun:
     """
     A Generic Gun
