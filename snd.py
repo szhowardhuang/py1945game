@@ -1,4 +1,6 @@
-"""audio class, helps everyone to audio"""
+"""audio class, helps everyone to audio
+Copyright Peter Shinners from SolarWolf.
+"""
 
 import pygame, os
 from pygame.locals import *

@@ -28,6 +28,11 @@ levelupfont = None
 levelupcolors = []
 
 def load_game_resources():
+    """
+    Carregamento de recursos para o jogo.
+    Imagens de finalizacao e loading, alem de sons,
+    sao pre-inicializados aqui.
+    """
     global getready_images, statekeys, quit_images, font
     global levelupcolors
     
@@ -47,6 +52,9 @@ def load_game_resources():
     statekeys = {}.fromkeys([K_LEFT, K_RIGHT, K_UP, K_DOWN, K_ESCAPE, K_s], False)
     
 class GamePlay:
+    """
+    Classe que gerencia o fluxo do jogo.
+    """
     def __init__(self, prevhandler):
         self.startlevel = game.player.start_level()
         self.newcontinue = 0
@@ -86,7 +94,6 @@ class GamePlay:
         self.lives_left = game.start_lives
         self.powerupcount = 0.0
         self.numdeaths = 0
-
         self.lasttick = pygame.time.get_ticks()
         self.wavetick = 0
         self.speedadjust = 1.0
@@ -99,6 +106,9 @@ class GamePlay:
         self.bgfill = gfx.surface.fill
 
     def starting(self):
+        """
+        Funcao de pre-inicializacao do jogo.
+        """
         if self.startmusic:
             self.startmusic = 0
             self.song = random.choice(Songs)
@@ -107,6 +117,10 @@ class GamePlay:
         gfx.dirty(self.background(gfx.rect))
 
     def invis_cleanup(self):
+        """
+        Limpa a area "invisivel", que nao esta situada
+        na arena de jogo.
+        """
         r = self.bgfill(0, (0, 0, game.arena.right, game.arena.top+5))
         gfx.dirty(r)
         r = self.bgfill(0, (0, game.arena.bottom, game.arena.right, game.size[1]))
@@ -119,22 +133,42 @@ class GamePlay:
         gfx.dirty(r)
         
     def cleanup(self):
-         r = self.bgfill(0, (0, 0, game.size[0], game.size[1]))
-         gfx.dirty(r) 
+        """
+        Limpa toda a area do jogo, quando deve-se finalizar o jogo
+        ou voltar para a tela de opcoes.
+        """
+        r = self.bgfill(0, (0, 0, game.size[0], game.size[1]))
+        gfx.dirty(r) 
            
     def gamewin(self):
+        """
+        Gerencia a vitoria do jogador, basicamente muda
+        seu estado.
+        """
         self.gamewon = 1
         self.changestate('gameover')
 
     def changestate(self, state):
+        """
+        Implementacao da maquina de estados do jogo.
+        A classe gerencia os diversos estados em que o jogador pode
+        se encontrar, e executa cada um destes fluxos.
+        
+        Parametros:
+            state - o estado a qual a maquina deve executar.
+        """
         getattr(self, self.state+'_end', self.dummyfunc)()
         self.state = state
         getattr(self, state+'_start', self.dummyfunc)()
         self.statetick = getattr(self, state+'_tick')
         
+    #Apenas para o metodo getattr
     def dummyfunc(self): pass
 
     def userquit(self):
+        """
+        Metodo de saida do jogo.
+        """
         self.cleanup()
         if self.state == 'gameover': return
         if self.lives_left and self.player.active:
@@ -144,17 +178,32 @@ class GamePlay:
             self.changestate('gameover')
 
     def input(self, event):
+        """
+        Gerencia a entrada do usuario durante o jogo.
+        
+        Parametros:
+            event - o evento de entrada detectado.
+        """
         if self.levelchanged: return
         if event.key in statekeys:
             statekeys[event.key] = (event.type == KEYDOWN)
         
     def dumpstatekeys(self):
+        """
+        Dump do estado das teclas que controlam o jogo, apenas
+        para debug.
+        """
+        if not game.DEBUG: return
         for key, state in statekeys.items():
             print 'Key ',pygame.key.name(key), 'is ', state
             
     def event(self, e): pass
 
     def run(self):
+        """
+        Controla o fluxo do jogo, executando o 
+        "tick" deste.
+        """
         if game.handler is not self: 
             return
         ratio = game.clockticks / 25
@@ -165,53 +214,74 @@ class GamePlay:
             self.speedadjust *= 0.75
         self.statetick()
 
+    #Se a tela de jogo perdeu ou ganhou o foco,
+    #executa os metodos abaixo.
     def gotfocus(self):
         pass
     
     def lostfocus(self): pass  
 
     def runobjects(self, objects):
+        """
+        Atualiza os objetos do jogo.
+        
+        Parametros:
+            objects - objetos do jogo a serem atualizados.
+        """
         G, B, S = gfx, self.background, self.speedadjust
 
-        #add pop for timedout powerups, sad place to do this, but owell
+        #Atualiza os objetos de powerup
         for o in self.powerupobjs:
             if o.dead:
                 self.powerupobjs.remove(o)
                         
-        #update all lists
+        #Atualiza todas as listas de objetos, executando
+        #os "ticks" respectivos de cada objeto.
         for l in objects:
             for o in l[:]:
                 o.erase(B)
                 o.tick(S)
                 if o.dead:
                     o.erase(B)
-                    l.remove(o)        
+                    l.remove(o)  
+        
+        #Atualiza o mapa.      
         if self.map:
             self.map.tick()
             self.map.draw()
 
+        #Desenha todos os objetos da lista.
         for l in objects:
             for o in l:
                 o.draw(G)
-                
+        
+        #Atualiza e desenha todos os objetos
+        #da wave de inimigos.        
         if self.curwave:
             [wave.tick(S) for wave in self.curwave]
             [wave.draw(G) for wave in self.curwave]
         
+        #Limpa as areas invisiveis, evitando tracos
+        #de elementos do jogo em areas nao visiveis.
         self.invis_cleanup()
         
+        #Desenha o hud com informacoes do jogo.
         self.hud.draw(self.player, self.waves)
            
     def background(self, area):
+        """
+        Limpa o background.
+        
+        Parametros:
+            area - area do background a ser limpa.
+        """
         return self.bgfill(0, area)
 
-    def tickleveltime(self, speedadjust=1):
-        if game.timeleft or game.timetick<0:
-            game.timeleft = game.timeleft - game.timetick * speedadjust
-            if game.timeleft < 0:
-                game.timeleft = 0.0
-
     def check_keys_state(self):
+        """
+        Muda o estado das teclas que controlam 
+        a aeronave do joador.
+        """
         if self.levelchanged: return
         if statekeys[K_ESCAPE]: self.userquit()
         if statekeys[K_LEFT]: self.player.cmd_left()
@@ -219,32 +289,59 @@ class GamePlay:
         if statekeys[K_UP]: self.player.cmd_up()
         if statekeys[K_DOWN]: self.player.cmd_down()
         if statekeys[K_s]: self.player.fire()
-        self.pos = self.player.rect.center
+        
+
+#==============================================================================
+#                   IMPLEMENTACAO DA MAQUINA DE ESTADO DO JOGO
+#==============================================================================
 
 #normal play
     def normal_start(self):
         self.clocks = 0
-        
+
     def normal_tick(self):
+        
         self.wavetick += 1
         
+        #Sem inimigos, fim do nivel.
         if self.waves == 0:
             self.changestate('levelend')
         
+        #Atualiza os inimigos.
         for wave in self.curwave:
             if wave.dead():
                 self.waves -= 1
                 self.curwave.remove(wave)
         
+        #Cria mais uma wave de inimigo e atualiza
+        #a lista de inimigos atuais.
         if self.wavetick > game.wavetime:
             wave, init_pos = levels.make()
             if wave <> None: 
                 wave.start(init_pos)
                 self.curwave.append(wave)
             self.wavetick = 0
-                
-        self.check_keys_state()  
-              
+            #Atualiza a data de criacao de um wave
+            self.lastwavecreated = game.clockticks
+        
+        #Verifica a entrada do jogador e atualiza sua posicao        
+        self.check_keys_state() 
+        self.pos = self.player.rect.center 
+        
+        #Adiciona um powerup caso seja hora.
+        self.powerupcount += 0.3
+        if self.powerupcount >= game.poweruptime and random.randint(0, 2000) in range(600, 700):
+            self.powerupcount = 0.0
+            p = objpowerup.newpowerup(self.levelnum)
+            self.powerupobjs.append(p)
+            snd.play('spring', 0.6)
+         
+        #
+        # Acoes do jogador/maquina
+        #     
+        
+        #Verifica se um dos inimigos atirou.
+        #Caso tenha atirado, adiciona a lista de tiros dos inimigos.
         if self.curwave:
             for wave in self.curwave:
                 for baddy in wave.enemies:
@@ -253,25 +350,30 @@ class GamePlay:
                     if shots:
                         self.baddyshotobjs.extend(shots)
                                 
+        #Verifica se o jogador atirou.
+        #Caso tenha, adiciona a lista de tiros do jogador.
         shots = self.player.shotinfo()
         if shots:
             self.playershotobjs.extend(shots)
             snd.play(self.player.gun.sound, 1.0)
         
-                    
-        #add a powerup if ready
-        self.powerupcount += 0.3
-        if self.powerupcount >= game.poweruptime and random.randint(0, 2000) in range(600, 700):
-            self.powerupcount = 0.0
-            p = objpowerup.newpowerup(self.levelnum)
-            self.powerupobjs.append(p)
-            snd.play('spring', 0.6)
-
-        self.tickleveltime(self.speedadjust)
-        playerrect = self.player.rect.inflate(-3, -3)
-        playercollide = playerrect.colliderect
+        #
+        # Testa colisao entre jogador e inimigos
+        #
         
-        #collide player to powerups
+        self.check_collision_player_powerups()
+        self.check_collision_player_enemies()            
+        self.check_collision_enemies_player()
+                
+        #Atualiza a lista de objetos do jogo.                    
+        self.runobjects(self.objlists) 
+
+# Metodos para deteccao de colisao.
+
+    def check_collision_player_powerups(self):
+        """
+        Testa a colisao entre o jogador e os powerups.
+        """
         for p in self.powerupobjs:
             if playercollide(p.rect):
                 p.dead = 1
@@ -280,10 +382,19 @@ class GamePlay:
                     self.player.stamina += effect.effect
                 else:
                     self.player.nextgun = effect.effect
-
-
+                    
+    def check_collision_player_enemies(self):
+        """
+        Testa a colisao entre o jogador e os inimigos, ou seus tiros.
+        """
+        
+        #Obtem o retangulo que envolve a aeronave do jogador, diminuindo
+        #um pouco sua area para que a colisao seja mais realista.
+        playerrect = self.player.rect.inflate(-3, -3)
+        playercollide = playerrect.colliderect
         hitbullet = 0
-        #collide player to baddies
+        
+        #Testa a colisao entre o jogador e os inimigos.
         if self.curwave:
             for wave in self.curwave:
                 for s in wave.enemies:
@@ -291,7 +402,7 @@ class GamePlay:
                         s.dead = 1
                         self.changestate('playerdie')
         
-        #collide player to baddies bullets
+        #Testa a colisao entre o jogador e tiros dos inimigos.
         for s in self.baddyshotobjs:
             r = s.rect
             if playercollide(r):
@@ -302,8 +413,11 @@ class GamePlay:
                     self.popobjs.append(objpopshot.PopShot(r.center))
                     self.changestate('playerdie')
                     hitbullet = 1
-                    
-        #collide baddies to player bullets
+        
+    def check_collision_enemies_player(self):
+        """
+        Testa a colisao entre os inimigos e os tiros do jogador.
+        """
         for s in self.playershotobjs:
             r = s.rect
             if self.curwave:
@@ -318,10 +432,6 @@ class GamePlay:
                             if baddy.stamina <= 0: 
                                 baddy.dead = 1
                                 self.popobjs.append(objpopshot.PopShot(r.center, size=baddy.size))
-                
-                            
-        self.runobjects(self.objlists) 
-        self.lastwavecreated = game.clockticks
 
 #player quit
     def playerquit_tick(self):
@@ -329,6 +439,8 @@ class GamePlay:
         
 #player die
     def playerdie_start(self):
+        #Adiciona um objeto de explosao da aeronave do jogador
+        #e finaliza o mapa.
         self.player.lives -= 1
         snd.play('explode', 1.0, self.player.rect.centerx)
         self.popobjs.append(objpopshot.PopShot(self.player.rect.center, size='big'))
@@ -338,6 +450,7 @@ class GamePlay:
         self.map.cleanup()
         
     def playerdie_tick(self):
+        #Direciona o jogador para um novo comeco ou fim do jogo.
         if self.player.lives > 0:
             self.player.active = 0
             self.changestate('playerstart')
@@ -346,10 +459,12 @@ class GamePlay:
             self.changestate('gameover')
 
     def playerdie_end(self):
+        #Limpa toda a area do jogo.
         gfx.surface.fill((0, 0, 0))
 
 #player start
     def playerstart_start(self):
+        #Cria um novo jogo.
         self.powerupcount = max(0.0, self.powerupcount - 15.0)
         wave, init_pos = levels.make()
         self.ticks = 0
@@ -444,29 +559,13 @@ class GamePlay:
 
 
     def gamestart_end(self): 
-#        if self.whip:
-#            self.whip.stop()
         self.ticks = 0
-#        del self.whip
 
 #level end
     def levelend_start(self):
         snd.play('levelfinish')
         self.player.dead = 1
         self.player.active = 0
-#        for x in self.popobjs: x.dead = 1
-#        for x in self.powerupobjs: x.dead = 1
-#        
-#        self.popobjs = []
-#        self.powerupobjs = []
-#                
-#        B = self.background
-#        for l in self.objlists:
-#            for o in l:
-#                o.erase(B)
-#                       
-#        if self.curwave: [wave.erase(B) for wave in self.curwave]
-#        self.runobjects(self.objlists)
         self.cleanup()
                 
     def levelend_tick(self):              

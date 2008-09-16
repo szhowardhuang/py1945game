@@ -10,10 +10,7 @@ import game, gfx, snd, txt
 credits = (
     ('Developer', ('Renato Silva',)),
     ('Graphics', ('Ari Fieldman - SpriteLib',)),
-    #('Music', ('"theGREENzebra"',)),
-    ('Beta Testers', ('Paulo Silla',)),
-    ('Special Thanks', ('Paulo Silla',)),
-    #('Special Thanks', ('David "Futility" Clark', 'Shandy Brown', 'John "Jacius" Croisant', 'Guido "Python" van Rossom', 'Sam "SDL" Lantinga')),
+    ('Beta Testers', ('Paulo Silla', 'Rafael Euclides')),
 )
 
 #Informacao de licenca do jogo

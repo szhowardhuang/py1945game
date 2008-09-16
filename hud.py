@@ -1,4 +1,9 @@
-#hud class
+"""
+Modulo hud.
+
+Exibe as informacoes de pontuacao, vida, armas, etc
+ao jogador.
+"""
 
 import pygame
 from pygame.locals import *
@@ -8,23 +13,28 @@ labelfont = None
 valuefont = None
 
 def load_game_resources():
-    #print 'Load game resources from hud'
+    """
+    Carregamento dos recursos para criacao do hud.
+    """
     global labelfont, valuefont
     fontname = 'stencil'
     valuefont = (txt.Font(fontname, 15), (255, 255, 255))
     labelfont = (txt.Font(fontname, 15), (221, 92, 14))
 
 class HUD:
-    
+    """
+    Define o hud.
+    """
     def __init__(self):
-        self.drawsurface = gfx.surface
         
+        self.drawsurface = gfx.surface 
         self.lastscore = 0
         self.lastlevel = 0
         self.lastgun = None
         self.lastlive = 0
         self.lastwave = 0
         
+        #Configura as areas para labels e texto.
         self.labelgunarea = Rect(game.arena.left + 100, game.arena.bottom + 20, 60, 20)
         self.valuegunarea = Rect(game.arena.left + 170, game.arena.bottom + 20, 80, 20)
         self.labelscorearea  = Rect(game.arena.left + 95, game.arena.bottom + 45, 60, 20)
@@ -36,22 +46,24 @@ class HUD:
         self.labelwavesarea  = Rect(game.arena.left + 263, game.arena.bottom + 40, 100, 30)
         self.valuewavesarea  = Rect(game.arena.left + 365, game.arena.bottom + 40, 60, 30)
                
-        #self.labellevelarea  = Rect(game.arena.left + 150, game.arena.bottom + 20, 120, 30)
-        #self.valuelevelarea  = Rect(game.arena.left + 150, game.arena.bottom + 20, 120, 30)
+    def drawlives(self, lives):
+        """
+        Desenha as vidas do jogador.
         
-        #self.area = Rect(game.arena.left, game.arena.bottom, game.arena.width, game.size[1] - game.arena.height)
-
-    def drawlives(self, lives, fast=0):
+        Parametros:
+            lives - numero de vidas do 
+                    jogador a serem desenhadas
+        """
         if lives < 0: lives = 0
         
-        #Draw life label
+        #Desenha o label de vidas.
         text = 'Life: '
         f, c = labelfont
         t = f.text(c, text, self.labellivesarea.topleft)
         self.drawsurface.blit(t[0], t[1])
         gfx.dirty(self.labellivesarea)
         
-        #Draw life value
+        #Desenha o status da vida.
         text = ' %02d ' % lives
         f, c = valuefont
         t = f.text(c, text, self.valuelivesarea.topleft)
@@ -59,17 +71,22 @@ class HUD:
         self.drawsurface.blit(t[0], t[1])
         gfx.dirty(self.valuelivesarea)
 
-    def drawscore(self, score, fast=0):
-        #print 'Draw score'
+    def drawscore(self, score):
+        """
+        Desenha a pontuacao do jogador.
         
-        #Draw score label
+        Parametros:
+            score - pontuacao do jogador a ser desenhada.
+        """
+        
+        #Desenha o label de pontuacao
         text = 'Score: '
         f, c = labelfont
         t = f.text(c, text, self.labelscorearea.topleft)
         self.drawsurface.blit(t[0], t[1])
         gfx.dirty(self.labelscorearea)
         
-        #Draw score value
+        #Desenha a pontuacao
         text = ' %06d ' % score
         f, c = valuefont
         t = f.text(c, text, self.valuescorearea.topleft)
@@ -79,15 +96,21 @@ class HUD:
 
     
     def drawgun(self, playergun): 
+        """
+        Desenha o nome da arma usada pelo jogador.
         
-        #Draw gun label
+        Parametros:
+            playergun - nome da arma usada pelo jogador.
+        """
+        
+        #Desenha o label de status da arma
         text = 'Gun: '
         f, c = labelfont
         t = f.text(c, text, self.labelgunarea.topleft)
         self.drawsurface.blit(t[0], t[1])
         gfx.dirty(self.labelgunarea)
         
-        #Draw gun value
+        #Desenha o nome da arma
         self.lastgun = playergun
         text = ' %20s ' % playergun
         f, c = valuefont
@@ -97,15 +120,22 @@ class HUD:
         gfx.dirty(self.valuegunarea)
     
     def drawwaves(self, wave):
+        """
+        Desenha o numero de waves ("levas" de inimigos)
+        restantes para finalizar o nivel.
         
-        #Draw wave label
+        Parametros:
+            wave - numero de waves restantes.
+        """
+        
+        #Desenha o label de waves restantes
         text = 'Waves Left: '
         f, c = labelfont
         t = f.text(c, text, self.labelwavesarea.topleft)
         self.drawsurface.blit(t[0], t[1])
         gfx.dirty(self.labelwavesarea)
         
-        #Draw wave value
+        #Desenha a quantidade de waves restantes
         self.lastwave = wave
         text = ' %02d ' % self.lastwave
         f, c = valuefont
@@ -115,18 +145,36 @@ class HUD:
         gfx.dirty(self.valuewavesarea)
     
     def scorecleanup(self):
+        """
+        Limpa o valor da pontuacao anterior.
+        """
         gfx.surface.fill((0, 0, 0), self.valuescorearea)
        
     def wavescleanup(self):
-         gfx.surface.fill((0, 0, 0), self.valuewavesarea)
+        """
+        Limpa o valor da quantidade de waves restantes anterior.
+        """
+        gfx.surface.fill((0, 0, 0), self.valuewavesarea)
          
     def guncleanup(self):
+        """
+        Limpa o nome da arma anterior usada pelo jogador.
+        """
         gfx.surface.fill((0, 0, 0), self.valuegunarea)
 
     def livescleanup(self):
+        """
+        Limpa a quantidade de vidas do jogador.
+        """
         gfx.surface.fill((0, 0, 0), self.valuelivesarea)
                 
-    def drawlevel(self, level, fast=0):
+    def drawlevel(self, level):
+        """
+        Desenha o nivel atual do jogo.
+        
+        Parametros:
+            level - nivel atual do jogo.
+        """
         dest = self.drawsurface
         offset = self.drawoffset
         if not fast:
@@ -143,6 +191,9 @@ class HUD:
         gfx.dirty2(r1, r2)
     
     def draw(self, player, wave):
+        """
+        Desenha todo o hud
+        """
         self.drawscore(player.score)
         if player.nextgun: self.drawgun(player.nextgun.name)
         elif player.gun: self.drawgun(player.gun.name)
