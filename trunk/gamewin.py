@@ -7,7 +7,7 @@ import math, os
 import pygame
 from pygame.locals import *
 import game, gfx, snd, txt
-import gameplay, gamemenu, players
+import gameplay, gamemenu
 
 #Nada emocionante, huh? =)
 cheer = (

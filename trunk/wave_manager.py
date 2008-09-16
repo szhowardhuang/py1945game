@@ -38,12 +38,21 @@ class Wave:
             i += 1
             
     def draw(self, gfx):
+        """
+        Desenha os inimigos da wave.
+        """
         [enemy.draw(gfx) for enemy in self.enemies]
             
     def erase(self, background):
+        """
+        Apaga os inimigos da wave.
+        """
         [enemy.erase(background) for enemy in self.enemies]
     
     def dead(self):
+        """
+        Verifica se o jogador venceu esta wave de inimigos.
+        """
         for enemy in self.enemies:
             if not enemy.dead:
                 return 0
