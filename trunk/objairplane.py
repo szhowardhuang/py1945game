@@ -1,4 +1,8 @@
 #player ship class
+"""
+TODO:
+Refatorar a classe de inimigos em diversas classes filhas.
+"""
 
 import pygame
 from pygame.locals import *
