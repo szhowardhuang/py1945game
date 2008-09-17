@@ -14,9 +14,9 @@ class Gun:
     """
     SINGLE_SHOT_CLASS = partial(objshot.Shot, 'single2', dmg=2.5)
     TWIN_SHOT_CLASS = partial(objshot.Shot, 'double', dmg=7.5)
-    BALL_SHOT_CLASS = partial(objshot.Shot, 'ball2', dmg=2.5)
-    SPREAD_SHOT_CLASS = partial(objshot.Shot, 'ball2',dmg=4.5)
-    REDBALL_SHOT_CLASS = partial(objshot.Shot, 'ball2', dmg=6)
+    BALL_SHOT_CLASS = partial(objshot.Shot, 'ball', dmg=2.5)
+    SPREAD_SHOT_CLASS = partial(objshot.Shot, 'ball',dmg=4.5)
+    REDBALL_SHOT_CLASS = partial(objshot.Shot, 'ball', dmg=6)
     
     def __init__(self, name):
         self.bullet = 0
