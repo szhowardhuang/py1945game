@@ -13,7 +13,7 @@ dict_images = {}
 def load_game_resources():
     #load shot graphics
     global dict_images
-    for name in ('ball2', 'double', 'single2', 'redball'):
+    for name in ('ball', 'double', 'single2'):
         dict_images[name] = [gfx.load(name+'_fire.png')]
 
 

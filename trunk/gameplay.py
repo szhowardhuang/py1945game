@@ -56,8 +56,7 @@ class GamePlay:
     Classe que gerencia o fluxo do jogo.
     """
     def __init__(self, prevhandler):
-        self.startlevel = game.player.start_level()
-        self.newcontinue = 0
+        self.startlevel = 1
         self.ticks = 0
         self.levelnum = -1
         self.gamewon = 0
@@ -486,7 +485,6 @@ class GamePlay:
         
 #level start
     def levelstart_start(self):
-        self.skipping = game.timeleft > 0.0
         self.levelnum += 1
 
         self.numdeaths = 0
@@ -494,12 +492,6 @@ class GamePlay:
         levels.init('waves%d' % self.levelnum)
         self.waves = levels.maxwavesperlevel()
         
-        if self.levelnum > game.player.score:
-            game.player.score = self.levelnum
-        
-        if not self.newcontinue and game.player.start_level() > self.startlevel:
-            self.newcontinue = 1
-
         if pygame.time.get_ticks() - self.songtime > game.musictime:
             songs = list(Songs)
             songs.remove(self.song)
