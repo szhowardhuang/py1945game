@@ -143,8 +143,7 @@ class Airplane:
             if gun.bullet == 0: 
                 return None 
             r = list(self.rect.center)
-            #r[0] += self.rect.width/2.0
-            #r = tuple(r) 
+ 
             shots = gun.shot(r, self.shotspeed)
             return shots
         elif self.gun:
@@ -208,8 +207,6 @@ class PlayerAirplane(Airplane):
             self.move[1] = 0
         if self.rect.left < game.arena.left:
             self.rect.left = game.arena.left
-            #pos = float(self.rect.left)
-            #self.pos = pos
             self.move[0] = 0
         elif self.rect.right > game.arena.right:
             self.rect.right = game.arena.right
@@ -283,37 +280,21 @@ class EnemyAirplane(Airplane):
         diff = 0 
         
         if s > 0:
-            #print 'Going down'
             if self.rect.bottom > game.arena.bottom:
                 bottom1 = self.rect.bottom
                 bottom2 = game.arena.bottom
                 diff = bottom1 - bottom2
             
-#            elif self.rect.top < game.arena.top:
-#                top1 = self.rect.top
-#                top2 = game.arena.top
-#                diff = top1 - top2
-            
             self.rect.height -= fabs(diff)
-            #r = Rect(self.rect.top, self.rect.left, self.rect.width, self.rect.height)
-            #self.rect = r
             if self.rect.height <= 0:
                   self.dead = 1
         else:
-             #print 'Going up'
-#            if self.rect.bottom > game.arena.bottom:
-#                bottom1 = self.rect.bottom
-#                bottom2 = game.arena.bottom
-#                diff = bottom1 - bottom2
-            
              if self.rect.top < game.arena.top:
                 top1 = self.rect.top
                 top2 = game.arena.top
                 diff = top1 - top2
             
              self.rect.height -= fabs(diff)
-             #r = Rect(self.rect.top, self.rect.left, self.rect.width, self.rect.height)
-             #self.rect = r
              if self.rect.height <= 0:
                   self.dead = 1
         
@@ -329,8 +310,6 @@ class EnemyAirplane(Airplane):
             diff = left1 - left2
             
         self.rect.width -= fabs(diff)
-        #r = Rect(self.rect.top, self.rect.left, self.rect.width, self.rect.height)
-        #self.rect = r
         if self.rect.width <= 0:
              self.dead = 1
              
