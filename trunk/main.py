@@ -7,6 +7,7 @@ import gamepref
 import gameplay
 from pygame.locals import *
 
+
 #at this point, all needed pygame modules should
 #be imported, so they can be initialized at the
 #start of main()
@@ -14,6 +15,7 @@ from pygame.locals import *
 def main(args):
     try:
         gamemain(args)
+        
     except KeyboardInterrupt:
         print 'Keyboard Interrupt...'
         print 'Exiting'

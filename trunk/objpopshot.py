@@ -15,7 +15,6 @@ def load_game_resources():
     small_explode_images = gfx.animstrip(gfx.load('explosion_small.png'), width=33)
     big_explode_images = gfx.animstrip(gfx.load('explosion_big.png'), width=66)
 
-
 class PopShot:
     def __init__(self, pos, size='small'):
         self.clocks = 0
