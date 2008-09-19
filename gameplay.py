@@ -373,6 +373,12 @@ class GamePlay:
         """
         Testa a colisao entre o jogador e os powerups.
         """
+        
+        #Obtem o retangulo que envolve a aeronave do jogador, diminuindo
+        #um pouco sua area para que a colisao seja mais realista.
+        playerrect = self.player.rect.inflate(-3, -3)
+        playercollide = playerrect.colliderect
+        
         for p in self.powerupobjs:
             if playercollide(p.rect):
                 p.dead = 1
@@ -417,6 +423,7 @@ class GamePlay:
         """
         Testa a colisao entre os inimigos e os tiros do jogador.
         """
+        
         for s in self.playershotobjs:
             r = s.rect
             if self.curwave:

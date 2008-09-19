@@ -37,6 +37,7 @@ class HUD:
         #Configura as areas para labels e texto.
         self.labelgunarea = Rect(game.arena.left + 100, game.arena.bottom + 20, 60, 20)
         self.valuegunarea = Rect(game.arena.left + 170, game.arena.bottom + 20, 80, 20)
+        
         self.labelscorearea  = Rect(game.arena.left + 95, game.arena.bottom + 45, 60, 20)
         self.valuescorearea  = Rect(game.arena.left + 165, game.arena.bottom + 45, 70, 20)
         

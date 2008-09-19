@@ -1,8 +1,5 @@
 #player ship class
-"""
-TODO:
-Refatorar a classe de inimigos em diversas classes filhas.
-"""
+
 
 import pygame
 from pygame.locals import *
@@ -11,6 +8,7 @@ from math import fabs
 import objshot
 import objgun
 from random import randint
+from copy import copy
 
 shieldbg = None
 bulletbg = None
@@ -33,6 +31,42 @@ striker_image = None
 corsair_image = None
 fighter_image = None
 
+small_fighters_speed = 2.1
+small_fighters_life = 21
+small_fighters_shotspeed = 5
+small_fighters_gun = objgun.LightGun()
+inv_small_fighters_gun = objgun.InvLightGun()
+
+war_airplanes_speed = 1.8
+war_airplanes_life = 42
+war_airplanes_shotspeed = 8
+war_airplanes_leftgun = objgun.LeftRedBallGun()
+war_airplanes_rightgun = objgun.RightRedBallGun()
+
+corsair_speed = 3.5
+corsair_life = 31.5
+corsair_shotspeed = 10.5
+corsair_gun = objgun.LightGun()
+
+gunner_speed = 2
+gunner_life = 25
+gunner_shotspeed = 10 
+gunner_gun = objgun.LightGun()
+
+nogunfighter_speed = 2.4
+nogunfighter_life = 14
+
+striker_speed = 3.2
+striker_life = 25
+striker_shotspeed = 9
+striker_gun = objgun.LightGun()
+
+fighter_speed = 1.2
+fighter_life = 38.5
+fighter_shotspeed = 9
+fighter_gun = objgun.ArchGun()
+
+guns = [war_airplanes_leftgun, war_airplanes_rightgun]
 
 def load_game_resources():
     global corsair_image
@@ -82,8 +116,8 @@ def load_game_resources():
                       
     striker_image = gfx.load('striker.png')
     corsair_image = gfx.load('corsair.png')
-    #print 'Corsair image  = ', corsair_image
     fighter_image = gfx.load('fighter.png')
+    
     
 class Airplane:
     def __init__(self, stamina, speed, name= None):
@@ -129,12 +163,8 @@ class Airplane:
                 gun = self.nextgun
         if not gun:
                 gun = self.gun
-#        if gun.finishedfiring:
         gun.fire()
-    
-    #def powerup(self, powerup):
-    #    if isinstance(powerup, GunPowerUp):
-    
+        
     def shotinfo(self):
         gun = None
         if hasattr(self, 'nextgun') and self.nextgun:
@@ -150,8 +180,6 @@ class Airplane:
             if self.gun.bullet == 0: 
                 return None 
             r = list(self.rect.center)
-            #r[0] += self.rect.width/2.0
-            #r = tuple(r) 
             shots = self.gun.shot(r, self.shotspeed)
             return shots
         else: return None
@@ -197,8 +225,6 @@ class PlayerAirplane(Airplane):
         else:
             self.speed = int(self.speed * speedadjust)
 
-        #self.rect.topleft = tuple(self.pos)
-        #Verify that airplane is not outside game area
         if self.rect.top < game.arena.top:
             self.rect.top = game.arena.top
             self.move[1] = 0
@@ -210,7 +236,6 @@ class PlayerAirplane(Airplane):
             self.move[0] = 0
         elif self.rect.right > game.arena.right:
             self.rect.right = game.arena.right
-            #pos = float(self.rect.left)
             self.move[0] = 0
             
     def cmd_right(self): self._move(1 * self.speed, 0)
@@ -326,4 +351,92 @@ class EnemyAirplane(Airplane):
             self.drawsurface.blit(img, self.rect)
             gfx.dirty2(self.rect, self.lastrect)
             self.lastrect = Rect(self.rect)
+            
+
+class SmallEnemyAirplane(EnemyAirplane):
+    
+    def __init__(self, images, direction=[0,1]):
+        EnemyAirplane.__init__(self, small_fighters_life, images,
+                                     speedy=small_fighters_speed , gun=copy(small_fighters_gun), 
+                                     shotspeed=small_fighters_shotspeed, direction=direction)
+
+class WarEnemyAirplane(EnemyAirplane):
+    
+    def __init__(self, i):
+        EnemyAirplane.__init__(self, war_airplanes_life, war_airplaneimages, 
+                                    speedy=war_airplanes_speed, gun=copy(guns[i]), 
+                                    shotspeed=war_airplanes_shotspeed, direction=[0, 1], size='big')
+
+class BlueSmallEnemyAirplane(SmallEnemyAirplane):
+    
+    def __init__(self):
+        SmallEnemyAirplane.__init__(self, bluestalker_images)
+    
+class GreenSmallEnemyAirplane(SmallEnemyAirplane):
+    
+    def __init__(self):
+        SmallEnemyAirplane.__init__(self, greenstalker_images)
+        
+class LightGreenSmallEnemyAirplane(SmallEnemyAirplane):
+    
+    def __init__(self):
+        SmallEnemyAirplane.__init__(self, lightgreenstalker_images)
+        
+class YellowSmallEnemyAirplane(SmallEnemyAirplane):
+    
+    def __init__(self):
+        SmallEnemyAirplane.__init__(self, yellowstalker_images)
+        
+class GraySmallEnemyAirplane(SmallEnemyAirplane):
+    
+    def __init__(self):
+        SmallEnemyAirplane.__init__(self, graystalker_images)
+        
+class InvertedBlueSmallEnemyAirplane(SmallEnemyAirplane):
+    
+    def __init__(self):
+        SmallEnemyAirplane.__init__(self, inv_bluestalker_images, direction=[0, -1])
+    
+class InvertedGreenSmallEnemyAirplane(SmallEnemyAirplane):
+    
+    def __init__(self):
+        SmallEnemyAirplane.__init__(self, inv_greenstalker_images, direction=[0, -1])
+        
+class InvertedYellowSmallEnemyAirplane(SmallEnemyAirplane):
+    
+    def __init__(self):
+        SmallEnemyAirplane.__init__(self, inv_yellowstalker_images, direction=[0, -1])
+        
+class CorsairEnemyAirplane(EnemyAirplane):
+    
+    def __init__(self):
+        EnemyAirplane.__init__(self, corsair_life, corsair_image, speedy=corsair_speed,
+                                     gun=copy(corsair_gun), shotspeed=corsair_shotspeed,
+                                     direction=[0, 1])
+        
+class GunnerEnemyAirplane(EnemyAirplane):
+    
+    def __init__(self):
+        EnemyAirplane.__init__(self, gunner_life, gunner_images, speedx=gunner_speed/1.3,
+                                     speedy=gunner_speed, gun=copy(gunner_gun), 
+                                     shotspeed=gunner_shotspeed, direction=[0.9, 1], shottick=15, size='big')
+        
+class FighterEnemyAirplane(EnemyAirplane):
+    
+    def __init__(self):
+        EnemyAirplane.__init__(self, fighter_life, fighter_image, speedy=fighter_speed,
+                                 gun=copy(fighter_gun), shotspeed=fighter_shotspeed,
+                                 direction=[0, 1])
+        
+class GunlessFighterEnemyAirplane(EnemyAirplane):
+    
+    def __init__(self, direction):
+        EnemyAirplane.__init__(self, nogunfighter_life, nogunfighter_images,
+                                     speedx=nogunfighter_speed/1.35, speedy=nogunfighter_speed, 
+                                     direction=direction)
+        
+        
+
+
+
     
