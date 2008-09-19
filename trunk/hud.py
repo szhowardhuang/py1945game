@@ -38,14 +38,14 @@ class HUD:
         self.labelgunarea = Rect(game.arena.left + 100, game.arena.bottom + 20, 60, 20)
         self.valuegunarea = Rect(game.arena.left + 170, game.arena.bottom + 20, 80, 20)
         
-        self.labelscorearea  = Rect(game.arena.left + 95, game.arena.bottom + 45, 60, 20)
-        self.valuescorearea  = Rect(game.arena.left + 165, game.arena.bottom + 45, 70, 20)
+        self.labelscorearea  = Rect(game.arena.left + 95, game.arena.bottom + 50, 60, 20)
+        self.valuescorearea  = Rect(game.arena.left + 165, game.arena.bottom + 50, 70, 20)
         
         self.labellivesarea  = Rect(game.arena.left + 390, game.arena.bottom + 20, 40, 20)
-        self.valuelivesarea  = Rect(game.arena.left + 440, game.arena.bottom + 20, 50, 20)
+        self.valuelivesarea  = Rect(game.arena.left + 450, game.arena.bottom + 20, 50, 20)
         
-        self.labelwavesarea  = Rect(game.arena.left + 263, game.arena.bottom + 40, 100, 30)
-        self.valuewavesarea  = Rect(game.arena.left + 365, game.arena.bottom + 40, 60, 30)
+        self.labelwavesarea  = Rect(game.arena.left + 295, game.arena.bottom + 50, 100, 30)
+        self.valuewavesarea  = Rect(game.arena.left + 395, game.arena.bottom + 50, 60, 30)
                
     def drawlives(self, lives):
         """
