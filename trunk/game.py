@@ -72,5 +72,5 @@ def make_dataname(filename):
     filename = os.path.normpath(filename)
     return filename
 
-version = "0.0.1" #Versao atual do jogo
+version = "0.3.4" #Versao atual do jogo
 DEBUG = 0  #Modo de debug

@@ -28,8 +28,7 @@ def gamemain(args):
 
     gamepref.load_prefs()
 
-    full = 1
-    gfx.initialize(game.size, full)
+    gfx.initialize(game.size)
     pygame.display.set_caption('Py1945')
 
     #input.init()
@@ -69,13 +68,7 @@ def gamemain(args):
                         else:
                             game.handler.lostfocus()
                 continue
-            if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
-                if event.key == pygame.K_RETURN and event.mod&pygame.KMOD_ALT:
-                    game.display = not game.display
-                    gfx.switchfullscreen()
-                    continue
-                else:
-                    handler.input(event)
+                handler.input(event)
             elif event.type == pygame.QUIT:
                 game.handler = None
                 break

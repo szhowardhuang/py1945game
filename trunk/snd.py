@@ -33,7 +33,6 @@ def preload(*names):
     for name in names:
         if not sound_cache.has_key(name):
             fullname = os.path.join(base_dir+sep+'data', 'audio', name+'.wav')
-            #file = game.get_resource(name+'.wav')
             try: sound = mixer.Sound(fullname)
             except: sound = None
             sound_cache[name] = sound
@@ -43,8 +42,6 @@ def fetch(name):
     if not sound_cache.has_key(name):
         preload(name)
     return sound_cache[name]
-
-
 
 def play(name, volume=1.0, pos=-1):
     prefvolume = [0, 0.6, 1.0][game.volume]
@@ -68,6 +65,7 @@ def play(name, volume=1.0, pos=-1):
 CurrentSong = None
 CurrentVolume = 1.0
 SwitchingSongs = 0
+
 def playmusic(musicname, volume=1.0):
     if not music or not game.music: return
     global CurrentSong, SwitchingSongs, CurrentVolume
@@ -98,8 +96,6 @@ def finish_playmusic():
     music.load(fullname)
     music.play(-1)
     music.set_volume(prefvolume*CurrentVolume)
-
-
 
 def tweakmusicvolume():
     if not music:
