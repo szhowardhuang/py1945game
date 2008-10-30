@@ -68,7 +68,8 @@ def gamemain(args):
                         else:
                             game.handler.lostfocus()
                 continue
-                handler.input(event)
+            elif event.type == pygame.KEYUP or event.type == pygame.KEYDOWN:
+				handler.input(event)
             elif event.type == pygame.QUIT:
                 game.handler = None
                 break
