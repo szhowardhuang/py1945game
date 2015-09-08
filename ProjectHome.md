@@ -1,0 +1,1 @@
+Py1945 is an arcade game remake made in Python by myself, using the SpriteLib as graphics resources and sounds from various sites on the web.
